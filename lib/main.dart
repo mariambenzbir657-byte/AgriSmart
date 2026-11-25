@@ -6,6 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:agrismart/config.dart';
 import 'package:agrismart/firebase_options.dart';
 import 'package:agrismart/providers/auth_provider.dart';
+import 'package:agrismart/providers/maladies_provider.dart'; // NOUVEAU
 import 'package:agrismart/providers/meteo_provider.dart';
 import 'package:agrismart/providers/reglages_provider.dart';
 import 'package:agrismart/providers/zones_provider.dart';
@@ -14,6 +15,7 @@ import 'package:agrismart/services/auth_locale_service.dart';
 import 'package:agrismart/services/auth_service.dart';
 import 'package:agrismart/services/firebase_auth_service.dart';
 import 'package:agrismart/theme/app_theme.dart';
+import 'package:agrismart/services/maladies_api_service.dart';
 
 Future<void> main() async {
   // obligatoire avant tout appel asynchrone dans main()
@@ -41,7 +43,9 @@ Future<void> main() async {
           create: (context) => ZonesProvider(prefs, context.read<AuthProvider>()),
         ),
         ChangeNotifierProvider(create: (_) => MeteoProvider(prefs)..charger()),
-      ],
+        ChangeNotifierProvider(
+          create: (_) => MaladiesProvider(MaladiesApiService())..charger(),
+        ),      ],
       child: const AgriSmartApp(),
     ),
   );
@@ -58,7 +62,7 @@ class AgriSmartApp extends StatelessWidget {
       theme: AppTheme.clair(),
       darkTheme: AppTheme.sombre(),
       themeMode: context.watch<ReglagesProvider>().themeMode,
-      home: const AuthGate(), // ancien : const AppShell()
+      home: const AuthGate(),
     );
   }
 }
