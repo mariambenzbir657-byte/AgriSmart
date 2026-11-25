@@ -83,7 +83,7 @@ class _CalendarPageState extends State<CalendarPage> {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       DropdownButtonFormField<TypeActivite>(
-                        value: typeSelectionne,
+                        initialValue: typeSelectionne,
                         decoration: const InputDecoration(
                           labelText: 'Type d\'opération',
                         ),
@@ -113,7 +113,7 @@ class _CalendarPageState extends State<CalendarPage> {
                       ),
                       const SizedBox(height: 12),
                       DropdownButtonFormField<String>(
-                        value: zoneSelectionnee,
+                        initialValue: zoneSelectionnee,
                         decoration: const InputDecoration(
                           labelText: 'Zone agricole',
                         ),
