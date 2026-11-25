@@ -46,6 +46,11 @@
       ]
     },
     {
+      "name": "vector_math",
+      "version": "2.4.0",
+      "dependencies": []
+    },
+    {
       "name": "test_api",
       "version": "0.7.12",
       "dependencies": [
@@ -70,6 +75,11 @@
     {
       "name": "path",
       "version": "1.9.1",
+      "dependencies": []
+    },
+    {
+      "name": "meta",
+      "version": "1.18.3",
       "dependencies": []
     },
     {
@@ -130,11 +140,6 @@
       "dependencies": [
         "path"
       ]
-    },
-    {
-      "name": "meta",
-      "version": "1.19.0",
-      "dependencies": []
     },
     {
       "name": "clock",
@@ -201,11 +206,6 @@
       "dependencies": [
         "flutter"
       ]
-    },
-    {
-      "name": "vector_math",
-      "version": "2.4.4",
-      "dependencies": []
     },
     {
       "name": "async",
