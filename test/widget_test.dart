@@ -1,30 +1,46 @@
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility in the flutter_test package. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
-
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:provider/provider.dart';
 
 import 'package:agrismart/main.dart';
+import 'package:agrismart/providers/calendar_provider.dart';
+import 'package:agrismart/providers/zones_provider.dart';
+
+Widget _buildTestApp() {
+  return MultiProvider(
+    providers: [
+      ChangeNotifierProvider(create: (_) => ZonesProvider()),
+      ChangeNotifierProvider(create: (_) => CalendarProvider()),
+    ],
+    child: const AgriSmartApp(),
+  );
+}
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
+  testWidgets('AgriSmart loads zones, opens add zone dialog, and switches tabs',
+          (WidgetTester tester) async {
+        await tester.pumpWidget(_buildTestApp());
+        await tester.pumpAndSettle();
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+        // Vérifie l'affichage initial des zones
+        expect(find.text('AgriSmart'), findsOneWidget);
+        expect(find.textContaining('Parcelle Nord'), findsOneWidget);
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
+        // Ouvre le formulaire d'ajout de zone via le bouton '+'
+        await tester.tap(find.byIcon(Icons.add));
+        await tester.pumpAndSettle();
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
-  });
+        expect(find.text('Nouvelle zone agricole'), findsOneWidget);
+
+        // Ferme le dialogue
+        await tester.tap(find.text('Annuler'));
+        await tester.pumpAndSettle();
+
+        // Passe à l'onglet Calendrier
+        await tester.tap(find.text('Calendrier'));
+        await tester.pumpAndSettle();
+
+        expect(find.text('Planifier'), findsOneWidget);
+        expect(find.textContaining('Irrigation goutte-à-goutte'), findsOneWidget);
+      });
 }

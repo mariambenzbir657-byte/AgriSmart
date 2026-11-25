@@ -2,22 +2,22 @@
 import '../models/zone_model.dart';
 
 class ZonesProvider extends ChangeNotifier {
-  final List<AgriculturalZone> _zones = const [
-    AgriculturalZone(
+  final List<AgriculturalZone> _zones = [
+    const AgriculturalZone(
       id: 'z1',
       name: 'Parcelle Nord',
       crop: 'Olivier',
       soilMoisture: 42.0,
       irrigationActive: false,
     ),
-    AgriculturalZone(
+    const AgriculturalZone(
       id: 'z2',
       name: 'Serre Sud',
       crop: 'Tomate',
       soilMoisture: 68.5,
       irrigationActive: true,
     ),
-    AgriculturalZone(
+    const AgriculturalZone(
       id: 'z3',
       name: 'Champ Est',
       crop: 'Blé dur',
@@ -30,6 +30,28 @@ class ZonesProvider extends ChangeNotifier {
 
   int get activeIrrigationCount =>
       _zones.where((z) => z.irrigationActive).length;
+
+  void addZone({
+    required String name,
+    required String crop,
+    required double soilMoisture,
+    bool irrigationActive = false,
+  }) {
+    final newZone = AgriculturalZone(
+      id: 'z_${DateTime.now().millisecondsSinceEpoch}',
+      name: name.trim(),
+      crop: crop.trim(),
+      soilMoisture: soilMoisture.clamp(0.0, 100.0),
+      irrigationActive: irrigationActive,
+    );
+    _zones.add(newZone);
+    notifyListeners();
+  }
+
+  void removeZone(String zoneId) {
+    _zones.removeWhere((z) => z.id == zoneId);
+    notifyListeners();
+  }
 
   void toggleIrrigation(String zoneId) {
     final index = _zones.indexWhere((z) => z.id == zoneId);
