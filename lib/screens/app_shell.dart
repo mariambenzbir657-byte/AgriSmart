@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import 'package:agrismart/providers/zones_provider.dart';
 import 'package:agrismart/screens/accueil_page.dart';
+import 'package:agrismart/screens/maladies_screen.dart'; // NOUVEAU
 import 'package:agrismart/screens/profil_page.dart';
 import 'package:agrismart/screens/statistiques_page.dart';
 
@@ -27,6 +28,7 @@ class _AppShellState extends State<AppShell> {
         index: _onglet,
         children: const [
           AccueilPage(),
+          MaladiesScreen(), // NOUVEAU
           StatistiquesPage(),
           ProfilPage(),
         ],
@@ -51,6 +53,11 @@ class _AppShellState extends State<AppShell> {
               child: const Icon(Icons.grass),
             ),
             label: 'Zones',
+          ),
+          const NavigationDestination( // NOUVEAU
+            icon: Icon(Icons.bug_report_outlined),
+            selectedIcon: Icon(Icons.bug_report),
+            label: 'Maladies',
           ),
           const NavigationDestination(
             icon: Icon(Icons.bar_chart_outlined),
