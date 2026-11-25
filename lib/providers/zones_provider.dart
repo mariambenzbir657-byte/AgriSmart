@@ -75,6 +75,12 @@ class ZonesProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  void basculerVanne(Zone zone) {
+    zone.vanneOuverte = !zone.vanneOuverte;
+    _sauvegarder();
+    notifyListeners();
+  }
+
   void ajouter(Zone zone) {
     _zones.add(zone);
     _sauvegarder();

@@ -3,12 +3,12 @@ import 'package:provider/provider.dart';
 
 import 'package:agrismart/models/zone.dart';
 import 'package:agrismart/providers/zones_provider.dart';
+import 'package:agrismart/screens/irrigation_page.dart';
 import 'package:agrismart/screens/zone_detail_page.dart';
 import 'package:agrismart/screens/zone_form_page.dart';
 import 'package:agrismart/widgets/fiche_exploitation.dart';
 import 'package:agrismart/widgets/resume_exploitation.dart';
 import 'package:agrismart/widgets/zone_card.dart';
-import 'package:agrismart/screens/qr_scanner_page.dart';
 
 class AccueilPage extends StatelessWidget {
   const AccueilPage({super.key});
@@ -16,6 +16,13 @@ class AccueilPage extends StatelessWidget {
   void _message(BuildContext context, String texte) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text(texte)),
+    );
+  }
+
+  void _ouvrirIrrigation(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (_) => const IrrigationPage()),
     );
   }
 
@@ -105,40 +112,28 @@ class AccueilPage extends StatelessWidget {
 
     return ZoneCard(
       zone: zone,
-      onAugmenter: () =>
-          provider.modifierHumidite(zone, 5),
-      onDiminuer: () =>
-          provider.modifierHumidite(zone, -5),
+      onAugmenter: () => provider.modifierHumidite(zone, 5),
+      onDiminuer: () => provider.modifierHumidite(zone, -5),
       onTap: () => _ouvrirDetail(context, zone),
-      onLongPress: () =>
-          _confirmerSuppression(context, zone),
+      onLongPress: () => _confirmerSuppression(context, zone),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    final zones =
-        context.watch<ZonesProvider>().zones;
+    final zones = context.watch<ZonesProvider>().zones;
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor:
-        Theme.of(context).colorScheme.inversePrimary,
+        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: const Text('AgriSmart'),
         actions: [
           IconButton(
-            icon: const Icon(Icons.qr_code_scanner),
-            tooltip: 'Scanner QR Code',
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const QRScannerPage(),
-                ),
-              );
-            },
+            icon: const Icon(Icons.water_drop),
+            tooltip: 'Irrigation',
+            onPressed: () => _ouvrirIrrigation(context),
           ),
-        ]
+        ],
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => _ajouter(context),
@@ -155,22 +150,16 @@ class AccueilPage extends StatelessWidget {
           Expanded(
             child: zones.isEmpty
                 ? const Center(
-              child: Text(
-                'Aucune zone pour le moment',
-              ),
+              child: Text('Aucune zone pour le moment'),
             )
                 : ListView.separated(
-              padding: const EdgeInsets.only(
-                bottom: 80,
-              ),
+              padding: const EdgeInsets.only(bottom: 80),
               itemCount: zones.length,
-              separatorBuilder: (_, _) =>
-              const Divider(),
-              itemBuilder: (context, index) =>
-                  _carte(
-                    context,
-                    zones[index],
-                  ),
+              separatorBuilder: (_, _) => const Divider(),
+              itemBuilder: (context, index) => _carte(
+                context,
+                zones[index],
+              ),
             ),
           ),
         ],
