@@ -1,25 +1,18 @@
 enum TypeActivite {
-  irrigation,
-  fertilisation,
-  semis,
-  recolte,
-  autre,
-}
+  irrigation('Irrigation'),
+  fertilisation('Fertilisation'),
+  semis('Semis'),
+  recolte('Récolte'),
+  autre('Autre');
 
-extension TypeActiviteExtension on TypeActivite {
-  String get label {
-    switch (this) {
-      case TypeActivite.irrigation:
-        return 'Irrigation';
-      case TypeActivite.fertilisation:
-        return 'Fertilisation';
-      case TypeActivite.semis:
-        return 'Semis';
-      case TypeActivite.recolte:
-        return 'Récolte';
-      case TypeActivite.autre:
-        return 'Autre';
-    }
+  final String label;
+  const TypeActivite(this.label);
+
+  static TypeActivite fromName(String? name) {
+    return TypeActivite.values.firstWhere(
+          (e) => e.name == name,
+      orElse: () => TypeActivite.autre,
+    );
   }
 }
 
@@ -59,6 +52,42 @@ class ActiviteAgricole {
       zoneNom: zoneNom ?? this.zoneNom,
       notes: notes ?? this.notes,
       estTerminee: estTerminee ?? this.estTerminee,
+    );
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'titre': titre,
+      'type': type.name,
+      'date': date.toIso8601String(),
+      'zoneNom': zoneNom,
+      'notes': notes,
+      'estTerminee': estTerminee,
+    };
+  }
+
+  factory ActiviteAgricole.fromMap(Map<String, dynamic> map, {String? docId}) {
+    final rawDate = map['date'];
+    DateTime parsedDate;
+    if (rawDate is DateTime) {
+      parsedDate = rawDate;
+    } else if (rawDate is String) {
+      parsedDate = DateTime.tryParse(rawDate) ?? DateTime.now();
+    } else {
+      parsedDate = DateTime.now();
+    }
+
+    return ActiviteAgricole(
+      id: (map['id'] as String?)?.isNotEmpty == true
+          ? map['id'] as String
+          : (docId ?? ''),
+      titre: (map['titre'] as String?) ?? '',
+      type: TypeActivite.fromName(map['type'] as String?),
+      date: parsedDate,
+      zoneNom: (map['zoneNom'] as String?) ?? 'Parcelle Principale',
+      notes: (map['notes'] as String?) ?? '',
+      estTerminee: (map['estTerminee'] as bool?) ?? false,
     );
   }
 }

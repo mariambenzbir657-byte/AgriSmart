@@ -6,7 +6,7 @@ void main() {
   late CalendarProvider provider;
 
   setUp(() {
-    provider = CalendarProvider();
+    provider = CalendarProvider(enableFirestore: false);
   });
 
   test('evenementsAVenir returns upcoming activities sorted by date', () {
@@ -21,14 +21,14 @@ void main() {
     }
   });
 
-  test('ajouterActivite adds a new activity and notifies listeners', () {
+  test('ajouterActivite adds a new activity and notifies listeners', () async {
     var notified = false;
     provider.addListener(() => notified = true);
 
     final initialCount = provider.toutesLesActivites.length;
     final date = DateTime.now().add(const Duration(days: 2));
 
-    provider.ajouterActivite(
+    await provider.ajouterActivite(
       titre: 'Irrigation matin',
       type: TypeActivite.irrigation,
       date: date,
@@ -55,13 +55,13 @@ void main() {
     );
   });
 
-  test('modifierActivite and basculerStatut update activity properly', () {
+  test('modifierActivite and basculerStatut update activity properly', () async {
     final first = provider.toutesLesActivites.first;
 
-    provider.modifierActivite(
+    await provider.modifierActivite(
       first.copyWith(titre: 'Irrigation modifiée', notes: '60 min'),
     );
-    provider.basculerStatut(first.id);
+    await provider.basculerStatut(first.id);
 
     final updated =
     provider.toutesLesActivites.firstWhere((a) => a.id == first.id);
@@ -70,11 +70,11 @@ void main() {
     expect(updated.estTerminee, !first.estTerminee);
   });
 
-  test('supprimerActivite removes activity by id', () {
+  test('supprimerActivite removes activity by id', () async {
     final first = provider.toutesLesActivites.first;
     final initialCount = provider.toutesLesActivites.length;
 
-    provider.supprimerActivite(first.id);
+    await provider.supprimerActivite(first.id);
 
     expect(provider.toutesLesActivites.length, initialCount - 1);
     expect(

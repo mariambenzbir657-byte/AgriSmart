@@ -1,17 +1,49 @@
-# agrismart
+# AgriSmart
 
-A new Flutter project.
+Application mobile Flutter de gestion et de suivi des exploitations agricoles (Atelier Framework Cross-Platform | DSI31 - DSI32).
 
-## Getting Started
+## Fonctionnalités
 
-This project is a starting point for a Flutter application.
+- **Authentification avec Firebase**
+- **Gestion des zones agricoles (CRUD)**
+- **Dashboard et navigation multi-onglets**
+- **Informations météorologiques via API**
+- **Calendrier agricole (Membre 4)** :
+    - Planification des activités agricoles (`Irrigation`, `Fertilisation`, `Semis`, `Récolte`, `Autre`) avec date et heure.
+    - Association de chaque activité à une zone agricole et ajout de notes/dosage.
+    - Affichage des événements à venir triés par date, filtrage par type, marquage comme terminée, modification et suppression.
+    - Gestion d'état avec `Provider` (`CalendarProvider`) et synchronisation avec **Cloud Firestore** (collection `activites_agricoles`).
+- **Autres modules du plan d'équipe** :
+    - Historique d'irrigation (Membre 1)
+    - Notifications intelligentes (Membre 2)
+    - Scanner QR Code avec Google ML Kit (Membre 3)
 
-A few resources to get you started if this is your first Flutter project:
+## Structure du projet (Calendrier agricole)
 
-- [Learn Flutter](https://docs.flutter.dev/get-started/learn-flutter)
-- [Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Flutter learning resources](https://docs.flutter.dev/reference/learning-resources)
+- `lib/models/activite.dart` : modèle `ActiviteAgricole` et énumération `TypeActivite` (`toMap` / `fromMap`).
+- `lib/providers/calendar_provider.dart` : gestion d'état (`ChangeNotifier`) et intégration Firestore.
+- `lib/screens/calendar_page.dart` : interface utilisateur du calendrier agricole.
+- `test/calendar_provider_test.dart` : tests unitaires de `CalendarProvider`.
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Exécution et tests
+
+```bash
+flutter pub get
+flutter analyze
+flutter test
+---
+
+### 6. L'exécution finale fil terminal (`C:\projets\AgriSmart-Git`)
+Baad ma tcopier les fichiers w tsavegi (`Ctrl + S`), chaghel l'awamer hedhom b tartib:
+
+```powershell
+flutter pub get
+flutter analyze
+flutter test
+git add .
+git commit -m "Complete Member 4 agricultural calendar with Firestore and README"
+git push
+git checkout main
+git merge facture/achraf
+git push origin main
+git checkout facture/achraf
